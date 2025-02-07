@@ -13,11 +13,11 @@ const superheroSchema = z.object({
   humility: z.number().int().min(1).max(10),
 });
 
-type SuperPower = z.infer<typeof superheroSchema>;
+type Superhero = z.infer<typeof superheroSchema>;
 
 const clients = new Set<WSContext>();
 
-const superheroes: SuperPower[] = [];
+const superheroes: Superhero[] = [];
 
 const app = new Hono();
 
