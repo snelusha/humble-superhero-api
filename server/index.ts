@@ -1,8 +1,11 @@
 import { Hono } from "hono";
-import { cors } from 'hono/cors'
+import { cors } from "hono/cors";
 import { serve } from "@hono/node-server";
 
+import { createNodeWebSocket } from "@hono/node-ws";
+
 import { z } from "zod";
+import type { WSContext } from "hono/ws";
 
 const superheroSchema = z.object({
   name: z.string(),
@@ -12,11 +15,15 @@ const superheroSchema = z.object({
 
 type SuperPower = z.infer<typeof superheroSchema>;
 
+const clients = new Set<WSContext>();
+
 const superheroes: SuperPower[] = [];
 
 const app = new Hono();
 
-app.use('/api/*', cors())
+const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app });
+
+app.use("/api/*", cors());
 
 const api = app.basePath("/api");
 
@@ -38,18 +45,79 @@ api.post("/superheroes", async (c) => {
 
     superheroes.push(superhero);
 
+    clients.forEach((ws) =>
+      ws.send(JSON.stringify({ type: "create", superhero }))
+    );
+
     return c.json(superhero, 201);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return c.json("Invalid superhero data", 400);
     }
+
+    return c.json("Internal server error", 500);
   }
 });
 
-serve(
+api.put("/superheroes/:name", async (c) => {
+  const name = c.req.param("name");
+
+  try {
+    const superhero = superheroSchema.partial().parse(await c.req.json());
+
+    const index = superheroes.findIndex((s) => s.name === name);
+
+    if (index === -1) {
+      return c.json({ error: "Superhero not found" }, 404);
+    }
+
+    superheroes[index] = { ...superheroes[index], ...superhero };
+
+    clients.forEach((ws) =>
+      ws.send(JSON.stringify({ type: "update", superhero: superheroes[index] }))
+    );
+
+    return c.json(superheroes[index]);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return c.json("Invalid superhero data", 400);
+    }
+
+    return c.json("Internal server error", 500);
+  }
+});
+
+api.delete("/superheroes/:name", async (c) => {
+  const name = c.req.param("name");
+
+  const index = superheroes.findIndex((s) => s.name === name);
+
+  if (index === -1) {
+    return c.json({ error: "Superhero not found" }, 404);
+  }
+
+  const [superhero] = superheroes.splice(index, 1);
+
+  clients.forEach((ws) =>
+    ws.send(JSON.stringify({ type: "remove", superhero }))
+  );
+
+  return c.json(superhero);
+});
+
+app.get(
+  "/superheroes/ws",
+  upgradeWebSocket(() => ({
+    onOpen: (_, ws) => clients.add(ws),
+    onClose: (_, ws) => clients.delete(ws),
+  }))
+);
+
+const server = serve(
   {
     fetch: app.fetch,
     port: 4000,
   },
   () => console.log("Server is running on http://localhost:4000")
 );
+injectWebSocket(server);
