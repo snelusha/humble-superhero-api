@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from 'hono/cors'
 import { serve } from "@hono/node-server";
 
 import { z } from "zod";
@@ -14,6 +15,8 @@ type SuperPower = z.infer<typeof superheroSchema>;
 const superheroes: SuperPower[] = [];
 
 const app = new Hono();
+
+app.use('/api/*', cors())
 
 const api = app.basePath("/api");
 
