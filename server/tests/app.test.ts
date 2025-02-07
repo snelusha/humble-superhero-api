@@ -112,10 +112,13 @@ describe("humble-superhero-api", () => {
       superpower: "Super Strength",
     };
 
-    const request = new Request("http://localhost:4000/api/superheroes/Captain%20Humble", {
-      method: "PATCH",
-      body: JSON.stringify(superhero),
-    });
+    const request = new Request(
+      "http://localhost:4000/api/superheroes/Captain%20Humble",
+      {
+        method: "PATCH",
+        body: JSON.stringify(superhero),
+      }
+    );
 
     const response = await app.fetch(request);
     expect(response.status).toBe(200);
@@ -123,6 +126,78 @@ describe("humble-superhero-api", () => {
       name: "Captain Humble",
       superpower: "Super Strength",
       humility: 9,
+    });
+  });
+
+  it("should reject an update with an invalid humility score", async () => {
+    const superhero: Partial<Superhero> = {
+      humility: 11,
+    };
+
+    const request = new Request(
+      "http://localhost:4000/api/superheroes/Captain%20Humble",
+      {
+        method: "PATCH",
+        body: JSON.stringify(superhero),
+      }
+    );
+
+    const response = await app.fetch(request);
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      error: "Invalid superhero data",
+    });
+  });
+
+  it("should reject an update for a superhero not in the list", async () => {
+    const superhero: Partial<Superhero> = {
+      superpower: "Super Strength",
+    };
+
+    const request = new Request(
+      "http://localhost:4000/api/superheroes/Not%20Real",
+      {
+        method: "PATCH",
+        body: JSON.stringify(superhero),
+      }
+    );
+
+    const response = await app.fetch(request);
+    expect(response.status).toBe(404);
+    expect(await response.json()).toEqual({
+      error: "Superhero not found",
+    });
+  });
+
+  it("should delete a superhero", async () => {
+    const request = new Request(
+      "http://localhost:4000/api/superheroes/Captain%20Humble",
+      {
+        method: "DELETE",
+      }
+    );
+
+    const response = await app.fetch(request);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      name: "Captain Humble",
+      superpower: "Super Strength",
+      humility: 9,
+    });
+  });
+
+  it("should reject a delete for a superhero not in the list", async () => {
+    const request = new Request(
+      "http://localhost:4000/api/superheroes/Not%20Real",
+      {
+        method: "DELETE",
+      }
+    );
+
+    const response = await app.fetch(request);
+    expect(response.status).toBe(404);
+    expect(await response.json()).toEqual({
+      error: "Superhero not found",
     });
   });
 });
