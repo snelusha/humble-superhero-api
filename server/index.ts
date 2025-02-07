@@ -35,7 +35,7 @@ api.post("/superheroes", async (c) => {
 
     superheroes.push(superhero);
 
-    return c.json(superhero);
+    return c.json(superhero, 201);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return c.json("Invalid superhero data", 400);
