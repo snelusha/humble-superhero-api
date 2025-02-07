@@ -47,10 +47,10 @@ api.post("/superheroes", async (c) => {
     return c.json(superhero, 201);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return c.json("Invalid superhero data", 400);
+      return c.json({ error: "Invalid superhero data" }, 400);
     }
 
-    return c.json("Internal server error", 500);
+    return c.json({ error: "Internal server error" }, 500);
   }
 });
 
@@ -75,10 +75,10 @@ api.put("/superheroes/:name", async (c) => {
     return c.json(superheroes[index]);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return c.json("Invalid superhero data", 400);
+      return c.json({ error: "Invalid superhero data" }, 400);
     }
 
-    return c.json("Internal server error", 500);
+    return c.json({ error: "Internal server error" }, 500);
   }
 });
 

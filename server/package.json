@@ -3,10 +3,12 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run index.ts"
+    "dev": "bun run index.ts",
+    "test": "jest tests"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "ts-node": "^10.9.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -14,7 +16,10 @@
   "dependencies": {
     "@hono/node-server": "^1.13.8",
     "@hono/node-ws": "^1.0.7",
+    "@types/jest": "^29.5.14",
     "hono": "^4.7.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
     "zod": "^3.24.1"
   }
 }
