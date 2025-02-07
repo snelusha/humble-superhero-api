@@ -106,6 +106,25 @@ describe("humble-superhero-api", () => {
       },
     ]);
   });
+
+  it("should update a superhero with valid input", async () => {
+    const superhero: Partial<Superhero> = {
+      superpower: "Super Strength",
+    };
+
+    const request = new Request("http://localhost:4000/api/superheroes/Captain%20Humble", {
+      method: "PATCH",
+      body: JSON.stringify(superhero),
+    });
+
+    const response = await app.fetch(request);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      name: "Captain Humble",
+      superpower: "Super Strength",
+      humility: 9,
+    });
+  });
 });
 
 afterAll(() => server.close());

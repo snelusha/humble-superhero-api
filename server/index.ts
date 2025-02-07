@@ -54,8 +54,8 @@ api.post("/superheroes", async (c) => {
   }
 });
 
-api.put("/superheroes/:name", async (c) => {
-  const name = c.req.param("name");
+api.patch("/superheroes/:name", async (c) => {
+  const name = decodeURI(c.req.param("name"));
 
   try {
     const superhero = superheroSchema.partial().parse(await c.req.json());
