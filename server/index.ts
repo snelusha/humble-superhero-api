@@ -5,15 +5,10 @@ import { serve } from "@hono/node-server";
 import { createNodeWebSocket } from "@hono/node-ws";
 
 import { z } from "zod";
+
+import { superheroSchema, Superhero } from "./schema/superhero";
+
 import type { WSContext } from "hono/ws";
-
-const superheroSchema = z.object({
-  name: z.string(),
-  superpower: z.string(),
-  humility: z.number().int().min(1).max(10),
-});
-
-type Superhero = z.infer<typeof superheroSchema>;
 
 const clients = new Set<WSContext>();
 
@@ -118,6 +113,10 @@ const server = serve(
     fetch: app.fetch,
     port: 4000,
   },
-  () => console.log("Server is running on http://localhost:4000")
+  () =>
+    process.env.NODE_ENV !== "test" &&
+    console.log("Server is running on http://localhost:4000")
 );
 injectWebSocket(server);
+
+export { app, server };
