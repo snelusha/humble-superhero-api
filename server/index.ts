@@ -103,7 +103,15 @@ api.delete("/superheroes/:name", async (c) => {
 app.get(
   "/superheroes/ws",
   upgradeWebSocket(() => ({
-    onOpen: (_, ws) => clients.add(ws),
+    onOpen: async (_, ws) => {
+      clients.add(ws);
+      ws.send(
+        JSON.stringify({
+          type: "init",
+          superheroes,
+        })
+      );
+    },
     onClose: (_, ws) => clients.delete(ws),
   }))
 );
