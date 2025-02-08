@@ -1,5 +1,9 @@
 import "@/styles/globals.css";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
+import { Toaster } from "@/components/ui/sonner";
+
 import { geistMono, geistSans } from "@/styles/fonts";
 
 import { cn } from "@/styles/utils";
@@ -24,7 +28,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn(geistSans.variable, geistMono.variable)}>
-        {children}
+        <NuqsAdapter>
+          {children}
+          <Toaster />
+        </NuqsAdapter>
       </body>
     </html>
   );
