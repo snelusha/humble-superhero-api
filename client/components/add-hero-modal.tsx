@@ -32,7 +32,7 @@ import { cn } from "@/styles/utils";
 const superheroSchemaForm = z.object({
   name: z.string().nonempty(),
   superpower: z.string().nonempty(),
-  humility: z.coerce.number().min(1).max(10),
+  humilityScore: z.coerce.number().min(1).max(10),
 });
 
 type SuperheroForm = z.infer<typeof superheroSchemaForm>;
@@ -49,7 +49,7 @@ export function AddHeroModal({ open, onClose }: AddHeroModalProps) {
     defaultValues: {
       name: "",
       superpower: "",
-      humility: 0,
+      humilityScore: 0,
     },
   });
 
@@ -133,7 +133,7 @@ export function AddHeroModal({ open, onClose }: AddHeroModalProps) {
             />
             <FormField
               control={form.control}
-              name="humility"
+              name="humilityScore"
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Humility Score</FormLabel>

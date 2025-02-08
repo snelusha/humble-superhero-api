@@ -29,10 +29,10 @@ import { AddHeroModal } from "@/components/add-hero-modal";
 interface Superhero {
   name: string;
   superpower: string;
-  humility: number;
+  humilityScore: number;
 }
 
-const sortSuperheroes = (a: Superhero, b: Superhero) => b.humility - a.humility;
+const sortSuperheroes = (a: Superhero, b: Superhero) => b.humilityScore - a.humilityScore;
 
 export default function Page() {
   const [addHeroModalOpen, setAddHeroModalOpen] = useQueryState(
@@ -127,7 +127,7 @@ export default function Page() {
                 <TableRow key={superhero.name} className="hover:bg-muted/50">
                   <TableCell className="">{superhero.name}</TableCell>
                   <TableCell>{superhero.superpower}</TableCell>
-                  <TableCell>{superhero.humility}</TableCell>
+                  <TableCell>{superhero.humilityScore}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

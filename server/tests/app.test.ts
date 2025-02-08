@@ -7,7 +7,7 @@ describe("humble-superhero-api", () => {
     const superhero: Superhero = {
       name: "Captain Humble",
       superpower: "Invisibility",
-      humility: 9,
+      humilityScore: 9,
     };
 
     const request = new Request("http://localhost:4000/superheroes", {
@@ -24,7 +24,7 @@ describe("humble-superhero-api", () => {
     const superhero: Superhero = {
       name: "Captain Humble",
       superpower: "Invisibility",
-      humility: 11,
+      humilityScore: 11,
     };
 
     const request = new Request("http://localhost:4000/superheroes", {
@@ -35,13 +35,13 @@ describe("humble-superhero-api", () => {
     const response = await app.fetch(request);
     expect(response.status).toBe(400);
     expect(await response.json()).toEqual({
-      error: "Invalid superhero data",
+      error: "Humility score must be an integer between 1 and 10",
     });
   });
 
   it("should reject a superhero with missing fields", async () => {
     const superhero = {
-      name: "Captain Humble",
+      humilityScore: 9,
     };
 
     const request = new Request("http://localhost:4000/superheroes", {
@@ -60,7 +60,7 @@ describe("humble-superhero-api", () => {
     const superhero: Superhero = {
       name: "Captain Humble",
       superpower: "Invisibility",
-      humility: 9,
+      humilityScore: 9,
     };
 
     const request = new Request("http://localhost:4000/superheroes", {
@@ -80,9 +80,9 @@ describe("humble-superhero-api", () => {
       new Request("http://localhost:4000/superheroes", {
         method: "POST",
         body: JSON.stringify({
-          name: "Hum",
-          superpower: "Invisibility",
-          humility: 2,
+          name: "Batman",
+          superpower: "Detective Skills",
+          humilityScore: 2,
         }),
       })
     );
@@ -97,12 +97,12 @@ describe("humble-superhero-api", () => {
       {
         name: "Captain Humble",
         superpower: "Invisibility",
-        humility: 9,
+        humilityScore: 9,
       },
       {
-        name: "Hum",
-        superpower: "Invisibility",
-        humility: 2,
+        name: "Batman",
+          superpower: "Detective Skills",
+          humilityScore: 2,
       },
     ]);
   });
@@ -125,13 +125,13 @@ describe("humble-superhero-api", () => {
     expect(await response.json()).toEqual({
       name: "Captain Humble",
       superpower: "Super Strength",
-      humility: 9,
+      humilityScore: 9,
     });
   });
 
   it("should reject an update with an invalid humility score", async () => {
     const superhero: Partial<Superhero> = {
-      humility: 11,
+      humilityScore: 11,
     };
 
     const request = new Request(
@@ -145,7 +145,7 @@ describe("humble-superhero-api", () => {
     const response = await app.fetch(request);
     expect(response.status).toBe(400);
     expect(await response.json()).toEqual({
-      error: "Invalid superhero data",
+      error: "Humility score must be an integer between 1 and 10",
     });
   });
 
@@ -182,7 +182,7 @@ describe("humble-superhero-api", () => {
     expect(await response.json()).toEqual({
       name: "Captain Humble",
       superpower: "Super Strength",
-      humility: 9,
+      humilityScore: 9,
     });
   });
 
