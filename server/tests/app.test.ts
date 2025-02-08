@@ -10,7 +10,7 @@ describe("humble-superhero-api", () => {
       humility: 9,
     };
 
-    const request = new Request("http://localhost:4000/api/superheroes", {
+    const request = new Request("http://localhost:4000/superheroes", {
       method: "POST",
       body: JSON.stringify(superhero),
     });
@@ -27,7 +27,7 @@ describe("humble-superhero-api", () => {
       humility: 11,
     };
 
-    const request = new Request("http://localhost:4000/api/superheroes", {
+    const request = new Request("http://localhost:4000/superheroes", {
       method: "POST",
       body: JSON.stringify(superhero),
     });
@@ -44,7 +44,7 @@ describe("humble-superhero-api", () => {
       name: "Captain Humble",
     };
 
-    const request = new Request("http://localhost:4000/api/superheroes", {
+    const request = new Request("http://localhost:4000/superheroes", {
       method: "POST",
       body: JSON.stringify(superhero),
     });
@@ -63,7 +63,7 @@ describe("humble-superhero-api", () => {
       humility: 9,
     };
 
-    const request = new Request("http://localhost:4000/api/superheroes", {
+    const request = new Request("http://localhost:4000/superheroes", {
       method: "POST",
       body: JSON.stringify(superhero),
     });
@@ -77,7 +77,7 @@ describe("humble-superhero-api", () => {
 
   it("should return superhero sorted by humility in descending order", async () => {
     await app.fetch(
-      new Request("http://localhost:4000/api/superheroes", {
+      new Request("http://localhost:4000/superheroes", {
         method: "POST",
         body: JSON.stringify({
           name: "Hum",
@@ -87,7 +87,7 @@ describe("humble-superhero-api", () => {
       })
     );
 
-    const request = new Request("http://localhost:4000/api/superheroes", {
+    const request = new Request("http://localhost:4000/superheroes", {
       method: "GET",
     });
 
@@ -113,7 +113,7 @@ describe("humble-superhero-api", () => {
     };
 
     const request = new Request(
-      "http://localhost:4000/api/superheroes/Captain%20Humble",
+      "http://localhost:4000/superheroes/Captain%20Humble",
       {
         method: "PATCH",
         body: JSON.stringify(superhero),
@@ -135,7 +135,7 @@ describe("humble-superhero-api", () => {
     };
 
     const request = new Request(
-      "http://localhost:4000/api/superheroes/Captain%20Humble",
+      "http://localhost:4000/superheroes/Captain%20Humble",
       {
         method: "PATCH",
         body: JSON.stringify(superhero),
@@ -155,7 +155,7 @@ describe("humble-superhero-api", () => {
     };
 
     const request = new Request(
-      "http://localhost:4000/api/superheroes/Not%20Real",
+      "http://localhost:4000/superheroes/Not%20Real",
       {
         method: "PATCH",
         body: JSON.stringify(superhero),
@@ -171,7 +171,7 @@ describe("humble-superhero-api", () => {
 
   it("should delete a superhero", async () => {
     const request = new Request(
-      "http://localhost:4000/api/superheroes/Captain%20Humble",
+      "http://localhost:4000/superheroes/Captain%20Humble",
       {
         method: "DELETE",
       }
@@ -188,7 +188,7 @@ describe("humble-superhero-api", () => {
 
   it("should reject a delete for a superhero not in the list", async () => {
     const request = new Request(
-      "http://localhost:4000/api/superheroes/Not%20Real",
+      "http://localhost:4000/superheroes/Not%20Real",
       {
         method: "DELETE",
       }

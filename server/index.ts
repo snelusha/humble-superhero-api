@@ -18,11 +18,9 @@ const app = new Hono();
 
 const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app });
 
-app.use("/api/*", cors());
+app.use("*", cors());
 
-const api = app.basePath("/api");
-
-api.get("/superheroes", (c) => {
+app.get("/superheroes", (c) => {
   const sortedSuperheroes = [...superheroes].sort(
     (a, b) => b.humility - a.humility
   );
@@ -30,7 +28,7 @@ api.get("/superheroes", (c) => {
   return c.json(sortedSuperheroes);
 });
 
-api.post("/superheroes", async (c) => {
+app.post("/superheroes", async (c) => {
   try {
     const superhero = superheroSchema.parse(await c.req.json());
 
@@ -54,7 +52,7 @@ api.post("/superheroes", async (c) => {
   }
 });
 
-api.patch("/superheroes/:name", async (c) => {
+app.patch("/superheroes/:name", async (c) => {
   const name = decodeURI(c.req.param("name"));
 
   try {
@@ -82,7 +80,7 @@ api.patch("/superheroes/:name", async (c) => {
   }
 });
 
-api.delete("/superheroes/:name", async (c) => {
+app.delete("/superheroes/:name", async (c) => {
   const name = c.req.param("name");
 
   const index = superheroes.findIndex((s) => s.name === name);
